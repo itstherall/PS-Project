@@ -27,8 +27,7 @@
 ## 1. Visão Geral do Projeto
 
 ### 1.1 Sobre
-
-Este sistema é uma plataforma web que permite a uma empresa de fotografia e videografia esportiva disponibilizar, organizar e comercializar fotografias de eventos esportivos. Atletas e clientes podem buscar suas próprias fotos — inclusive por **reconhecimento facial** — e adquiri-las com download em alta resolução.
+Para administradores de empresas de foto e videografia esportiva que têm a necessidade de manter seu portfólio disponível para os clientes, o site empresarial é um e-commerce audiovisual que facilita o acesso às produções. Diferentemente da Banlek, que é disponibilizada para qualquer fotógrafo independente e não prioriza trabalhos empresariais, nosso produto é construído para apresentar, de forma diferenciada, as produções e os trabalhos de uma empresa. Este sistema é uma plataforma web que permite a uma empresa de fotografia e videografia esportiva disponibilizar, organizar e comercializar fotografias de eventos esportivos. Atletas e clientes podem buscar suas próprias fotos — inclusive por **reconhecimento facial** — e adquiri-las com download em alta resolução.
 
 O projeto é inspirado na plataforma [Banlek](https://banlek.com), adaptado à realidade e necessidades da empresa.
 
