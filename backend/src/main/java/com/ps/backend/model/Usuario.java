@@ -41,7 +41,8 @@ public class Usuario implements UserDetails {
     private String senha;
 
     //Para separar usuarios compradores de administradores
-    private String role;
+     @Enumerated(EnumType.STRING)
+     private Role role;
 
 
     //Find by email here

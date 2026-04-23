@@ -28,44 +28,27 @@ public class SecurityFilter extends OncePerRequestFilter {
     private UsuarioRepository repository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-        HttpServletResponse response, 
-        FilterChain filterChain) 
-        throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
-        String token = recuperarToken(request);
+        var token = recuperarToken(request);
 
-        
         if (token != null) {
-            
-            String email = tokenService.validarToken(token);
+            var email = tokenService.validarToken(token);
+            var usuario = repository.findByEmail(email).get();
 
-            if (email != null) {
-                Usuario usuario = repository.findByEmail(email).get();
+            var authentication = new UsernamePasswordAuthenticationToken(
+                usuario, null, usuario.getAuthorities());
 
-                var authentication = new UsernamePasswordAuthenticationToken(
-                    usuario,
-                    null,
-                    List.of(new SimpleGrantedAuthority("ROLE_USER"))  //deixar assim por enquanto até eu ajeitar a parte de roles, ai eu coloco usuario.getAuthorities() aqui, e no Usuario.java eu implemento o getAuthorities() para retornar as roles do usuario, ai eu posso usar o @PreAuthorize("hasRole('ADMIN')") nas rotas de admin, e deixar as rotas de listagem e busca sem proteção, para que os usuarios comuns possam acessar
-
-                    //usuario.getAuthorities()
-                );
-
-                //SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         filterChain.doFilter(request, response);
     }
 
     private String recuperarToken(HttpServletRequest request) {
-
-        var cabecalhoAuth = request.getHeader("Authorization");
-
-        if (cabecalhoAuth == null){
-            return null;
-        }
-
-        return cabecalhoAuth.replace("Bearer ", "");
+        var header = request.getHeader("Authorization");
+        if (header == null) return null;
+        return header.replace("Bearer ", "");
     }
 }

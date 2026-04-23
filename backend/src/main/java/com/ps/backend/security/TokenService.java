@@ -26,8 +26,15 @@ public class TokenService {
     public String gerarToken(Usuario usuario) {
         return JWT.create()
             .withSubject(usuario.getEmail())
-            .withExpiresAt(expiracao())
+            .withClaim("role", usuario.getRole().name())
+            .withExpiresAt(dataExpiracao())
             .sign(Algorithm.HMAC256(secret));
+    }
+
+    private Instant dataExpiracao() {
+        return LocalDateTime.now()
+            .plusHours(2)
+            .toInstant(ZoneOffset.of("-03:00"));
     }
 
     public String validarToken(String token) {
@@ -39,11 +46,5 @@ public class TokenService {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    private Instant expiracao() {
-        return LocalDateTime.now()
-            .plusHours(2)
-            .toInstant(ZoneOffset.of("-03:00"));
     }
 }
