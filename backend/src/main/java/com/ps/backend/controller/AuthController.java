@@ -30,7 +30,7 @@ public class AuthController {
     AuthService service;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginDTO data) {
+    public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO data) {
 
         var authToken = new UsernamePasswordAuthenticationToken(
             data.email(), data.senha()
@@ -45,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody RegisterDTO data) {
+    public ResponseEntity<String> register(@RequestBody RegisterDTO data) {
         service.registrar(data);
         return ResponseEntity.ok("Usuário criado");
     }
