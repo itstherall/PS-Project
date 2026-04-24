@@ -4,8 +4,17 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Table(name = "foto")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Foto {
 
     @Id
@@ -23,28 +32,4 @@ public class Foto {
     private Double preco;
 
     private String descricao;
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 }

@@ -32,6 +32,8 @@ public class FotoService {
 
         existente.setNome(foto.getNome());
         existente.setUrl(foto.getUrl());
+        existente.setPreco(foto.getPreco());
+        existente.setDescricao(foto.getDescricao());
 
         return repository.save(existente);
     }
