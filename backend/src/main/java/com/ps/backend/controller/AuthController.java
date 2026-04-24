@@ -33,7 +33,7 @@ public class AuthController {
     public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO data) {
 
         var authToken = new UsernamePasswordAuthenticationToken(
-            data.email(), data.senha()
+                data.email(), data.senha()
         );
 
         var auth = authManager.authenticate(authToken);

@@ -18,7 +18,7 @@ public class AuthorizService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) {
 
         return repository.findByEmail(email)
-            .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
-    } 
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+    }
 
 }
