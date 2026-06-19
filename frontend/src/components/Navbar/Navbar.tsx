@@ -1,9 +1,11 @@
-import { Link } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { useState } from "react";
 import "./navbar.css";
 
 export function Navbar() {
-  const [searchBar, setSearchBar] = useState("");
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [searchBar, setSearchBar] = useState(searchParams.get("bucas") || "");
 
   return (
     <div className="header">
@@ -11,7 +13,13 @@ export function Navbar() {
         <button type="button" className="headerButton">
           <img src="icons/bookmark stacks.png" />
         </button>
-        <form action="/search" method="get" className="formPesquisa">
+        <form
+          className="formPesquisa"
+          onSubmit={(e) => {
+            e.preventDefault();
+            navigate(`/search?busca=${searchBar}`);
+          }}
+        >
           <input
             value={searchBar}
             onChange={(e) => setSearchBar(e.target.value)}
