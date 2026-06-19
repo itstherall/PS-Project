@@ -1,0 +1,249 @@
+* {
+  font-family: Arial;
+}
+
+.container {
+  max-width: 1280px;
+  margin: auto;
+  padding: 16px;
+  font-family: Arial;
+}
+
+body {
+  background-color: #d5dede;
+}
+
+.banner {
+  margin-top: 5em;
+  position: relative;
+
+  img {
+    width: 100vw;
+    height: 64vh;
+    filter: brightness(50%);
+    position: relative;
+    object-fit: cover;
+  }
+
+  label {
+    position: absolute;
+    font-size: 3em;
+    color: #eeeeee;
+    z-index: 9;
+    font-family: Arial;
+    top: 20vh;
+    left: 0;
+    right: 0;
+    text-align: center;
+    text-shadow: 2px 2px 4px #000000;
+  }
+}
+
+.category {
+  text-align: center;
+  width: 100%;
+  font-size: 2em;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+
+  .category-card {
+    display: grid;
+    position: relative;
+    place-items: center;
+    height: 200px;
+
+    img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 4px 4px 4px black;
+      filter: brightness(50%);
+      transition: filter 0.3s;
+      transition: transform 0.3s;
+      max-width: 1280px;
+      top: 0px;
+      left: 0px;
+      position: absolute;
+    }
+
+    label {
+      z-index: 9;
+      font-size: 2em;
+      color: #eeeeee;
+      opacity: 1;
+      transition: opacity 0.3s;
+    }
+  }
+
+  .category-card:hover {
+    img {
+      filter: brightness(100%);
+      transform: scale(1.025);
+    }
+
+    label {
+      opacity: 0;
+      transition: opacity(0.3s);
+    }
+  }
+}
+
+.search-results {
+  margin-top: 5em;
+  font-family: Arial;
+  text-align: center;
+  width: 100%;
+  font-size: 2em;
+}
+
+.search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 70px;
+  margin-top: 2em;
+
+  .gallery-results {
+    display: grid;
+    position: relative;
+    place-items: center;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    padding-bottom: 13px;
+    background-color: white;
+    gap: 6px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+
+      transition: filter 0.3s;
+      transition: transform 0.3s;
+      max-width: 1280px;
+    }
+
+    label {
+      font-size: 0.5em;
+      text-align: left;
+      width: 100%;
+      padding-left: 30px;
+    }
+
+    label:nth-of-type(2) {
+      font-weight: bold;
+    }
+
+    .buttonAddCart {
+      all: unset;
+      font-size: 0.5em;
+      background-color: #ffe000;
+      padding: 6px 8px;
+      border-radius: 5px;
+    }
+    .buttonAddCart:hover {
+      filter: brightness(90%);
+      transition: filter 0.3s;
+      transition: transform 0.3s;
+    }
+  }
+}
+
+#imgLogin {
+  width: 400px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 8px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  /*box-shadow: 4px 4px 4px black;*/
+  filter: brightness(50%);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 8px 0px;
+}
+
+.login-container {
+  max-width: 800px;
+  margin: auto;
+  height: 100vh;
+  padding: 16px;
+  display: grid;
+  place-items: center;
+  grid-template-columns: 1fr 1fr;
+  font-family: Arial;
+
+  form {
+    border: 1px solid white;
+    border-radius: 8px;
+    border-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    height: 350px;
+    width: 400px;
+    place-items: center;
+    box-sizing: border-box;
+    border-color: #008cb2;
+    border-width: 2px;
+    background-color: white;
+    padding: 16px;
+
+    input {
+      border-radius: 4px;
+      border: 1px solid #dddddd;
+      padding-left: 8px;
+      padding: 5px 7px;
+    }
+
+    #buttonIn {
+      all: unset;
+      width: 100%;
+      display: block;
+      text-align: center;
+      padding: 6px 8px;
+      margin: auto;
+      margin-top: 15px;
+      border-radius: 5px;
+      background-color: #008cb2;
+      color: white;
+      box-sizing: border-box;
+    }
+
+    #buttonIn:hover {
+      filter: brightness(70%);
+      transition: filter 0.3s;
+      transition: transform 0.3s;
+    }
+
+    .auxilliary-links {
+      margin: auto;
+      width: 100%;
+      text-align: right;
+      margin-right: 16px;
+
+      a:link,
+      a:visited,
+      a:active {
+        color: #008cb2;
+        font-size: 0.9em;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.footer {
+  font-family: Arial;
+  font-size: 1.5em;
+  border-top: 3px solid dimgray;
+  margin-top: 2em;
+}
