@@ -1,17 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>PS Project</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Busca - Copylet</title>
+
+    <link rel="stylesheet"
+          href="https://necolas.github.io/normalize.css/8.0.1/normalize.css">
+
+    <link rel="stylesheet"
+          type="text/css"
+          th:href="@{/css/home.css}">
 </head>
+
 <body>
 
-<h1>PS Project</h1>
+    <div class="header">
+        <div class="head-container container">
 
-<p>Sistema de venda de fotos</p>
+            <button type="button" class="headerButton">
+                <img th:src="@{/icons/bookmark stacks.png}" alt="Favoritos">
+            </button>
 
-<a href="/eventos">
-    Ver Eventos
-</a>
+            <form th:action="@{/search}" method="get" class="formPesquisa">
+
+                <input type="search"
+                       name="q"
+                       placeholder="Pesquisar..."
+                       required>
+
+                <button type="submit" class="headerButton">
+                    <img th:src="@{/icons/search.png}" alt="Pesquisar">
+                </button>
+
+            </form>
+
+            <button type="button" class="headerButton">
+                <img th:src="@{/icons/add shopping cart.png}" alt="Carrinho">
+            </button>
+
+        </div>
+    </div>
+
+    <div class="search-results container">
+
+        <label>Albuns</label>
+        <form th:action="@{/eventos}" method="get" class="filtros">
+
+            <select name="tipo">
+                <option value="">Todos os tipos</option>
+                <option value="FUTEBOL">Futebol</option>
+                <option value="CORRIDA">Corrida</option>
+                <option value="BASQUETE">Basquete</option>
+            </select>
+
+            <input type="date" name="data">
+
+            <button type="submit">
+                Filtrar
+            </button>
+
+        </form>
+        <div class="search-results-grid">
+
+            <div class="gallery-results">
+                <img th:src="@{/imagens/cycling.jpg}" alt="Sem imagem">
+                <label>Sem nome</label>
+                <label>R$ 00,00</label>
+                <button class="buttonAddCart">Adicionar ao carrinho</button>
+            </div>
+
+            <div class="gallery-results">
+                <img th:src="@{/imagens/football stadium.jpg}" alt="Sem imagem">
+                <label>Sem nome</label>
+                <label>R$ 00,00</label>
+                <button class="buttonAddCart">Adicionar ao carrinho</button>
+            </div>
+
+            <div class="gallery-results">
+                <img th:src="@{/imagens/race track.jpg}" alt="Sem imagem">
+                <label>Sem nome</label>
+                <label>R$ 00,00</label>
+                <button class="buttonAddCart">Adicionar ao carrinho</button>
+            </div>
+
+            <div class="gallery-results">
+                <img th:src="@{/imagens/running.jpg}" alt="Sem imagem">
+                <label>Sem nome</label>
+                <label>R$ 00,00</label>
+                <button class="buttonAddCart">Adicionar ao carrinho</button>
+            </div>
+
+            <div class="gallery-results">
+                <img th:src="@{/imagens/running2.jpg}" alt="Sem imagem">
+                <label>Sem nome</label>
+                <label>R$ 00,00</label>
+                <button class="buttonAddCart">Adicionar ao carrinho</button>
+            </div>
+
+            <div class="gallery-results">
+                <img th:src="@{/imagens/running3.jpg}" alt="Sem imagem">
+                <label>Sem nome</label>
+                <label>R$ 00,00</label>
+                <button class="buttonAddCart">Adicionar ao carrinho</button>
+            </div>
+
+            <div class="gallery-results">
+                <img th:src="@{/imagens/running4.jpg}" alt="Sem imagem">
+                <label>Sem nome</label>
+                <label>R$ 00,00</label>
+                <button class="buttonAddCart">Adicionar ao carrinho</button>
+            </div>
+
+            <div class="gallery-results">
+                <img th:src="@{/imagens/snow board.jpg}" alt="Sem imagem">
+                <label>Sem nome</label>
+                <label>R$ 00,00</label>
+                <button class="buttonAddCart">Adicionar ao carrinho</button>
+            </div>
+
+            <div class="gallery-results">
+                <img th:src="@{/imagens/soccer ball.jpg}" alt="Sem imagem">
+                <label>Sem nome</label>
+                <label>R$ 00,00</label>
+                <button class="buttonAddCart">Adicionar ao carrinho</button>
+            </div>
+
+            <div class="gallery-results">
+                <img th:src="@{/imagens/basket.jpg}" alt="Imagem de basquete">
+                <label>Sem nome</label>
+                <label>R$ 00,00</label>
+                <button class="buttonAddCart">Adicionar ao carrinho</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer container">
+        <label>Uma nota, no rodapé.</label>
+    </div>
 
 </body>
+
 </html>
