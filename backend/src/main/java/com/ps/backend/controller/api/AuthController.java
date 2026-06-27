@@ -1,4 +1,4 @@
-package com.ps.backend.controller;
+package com.ps.backend.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +19,7 @@ import com.ps.backend.service.AuthService;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+    
     @Autowired
     AuthenticationManager authManager;
     @Autowired

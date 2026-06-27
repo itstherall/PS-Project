@@ -1,4 +1,4 @@
-package com.ps.backend.controller;
+package com.ps.backend.controller.api;
 
 import com.ps.backend.model.Foto;
 import com.ps.backend.service.FotoService;

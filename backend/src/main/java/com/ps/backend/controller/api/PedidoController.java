@@ -1,4 +1,4 @@
-package com.ps.backend.controller;
+package com.ps.backend.controller.api;
 
 import com.ps.backend.dto.pedido.PedidoRequestDTO;
 import com.ps.backend.dto.pedido.PedidoResponseDTO;

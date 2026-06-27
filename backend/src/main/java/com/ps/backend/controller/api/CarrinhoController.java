@@ -1,4 +1,4 @@
-package com.ps.backend.controller;
+package com.ps.backend.controller.api;
 
 import com.ps.backend.dto.carrinho.CarrinhoResponseDTO;
 import com.ps.backend.model.Usuario;
