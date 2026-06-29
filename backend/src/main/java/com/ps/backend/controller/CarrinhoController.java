@@ -8,7 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/carrinho")
+@RequestMapping("/api/carrinho")
 public class CarrinhoController {
     private final CarrinhoService carrinhoService;
     public CarrinhoController(CarrinhoService carrinhoService) {
