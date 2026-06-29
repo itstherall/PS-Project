@@ -458,10 +458,9 @@ Fluxo principal:
 
 | Nome | Responsabilidades Principais |
 |------|------------------------------|
-| Thereza Angélica | Backend — autenticação e usuários |
-| Vinicius Davi | Backend — eventos e fotos |
-| Lucas de Oliveira | Frontend — galeria e busca |
-| Leandro Felix | Backend — carrinho, pedidos e integração |
+| Thereza Angélica | Backend — autenticação, usuários, carrinho, pedidos e integração | CD-CI: metricas DORA |
+| Vinicius Davi | Backend — eventos, fotos, carrinho, pedidos e integração | CD-CI: metricas DORA |
+| Lucas de Oliveira | CD-CI: metricas DORA |
 
 ### 6.2 Sprints
 
@@ -469,8 +468,8 @@ Fluxo principal:
 
 | Tarefa | Responsável |
 |--------|-------------|
-| Criar repositório e estrutura Spring Boot | Todos |
-| Criar banco de dados e migrations | Leandro |
+| Criar repositório e estrutura Spring Boot | Vinicius |
+| Criar banco de dados e migrations | Thereza e Vinicius |
 | Implementar cadastro e login com JWT | Thereza |
 | Criar layout base do frontend | Lucas |
 
@@ -479,10 +478,10 @@ Fluxo principal:
 | Tarefa | Responsável |
 |--------|-------------|
 | CRUD de categorias e eventos | Vinicius |
-| Listagem de eventos na página inicial | Lucas |
-| Grid de fotos com marca d'água | Lucas |
-| Upload de fotos pelo admin | Vinicius |
-| Lightbox de visualização | Lucas |
+| Listagem de eventos na página inicial | Thereza |
+| Grid de fotos com marca d'água | F |
+| Upload de fotos pelo admin | F |
+| Lightbox de visualização | F |
 
 **Sprint 3 — Busca e Carrinho** (2 semanas)
 
@@ -490,15 +489,15 @@ Fluxo principal:
 |--------|-------------|
 | Busca por texto e categoria | Vinicius |
 | Filtros de evento | Vinicius |
-| Adicionar/remover item do carrinho | Leandro |
-| Exibição do carrinho com totais | Lucas |
+| Adicionar/remover item do carrinho | Vinicius |
+| Exibição do carrinho com totais | Vinicius |
 
 **Sprint 4 — Compras e Admin** (2 semanas)
 
 | Tarefa | Responsável |
 |--------|-------------|
-| Finalizar compra e gerar pedido | Leandro |
-| Liberar download após compra | Leandro |
+| Finalizar compra e gerar pedido | Vinicius |
+| Liberar download após compra | Vinicius |
 | Gestão de eventos/fotos no admin | Vinicius |
 | Envio de avisos para clientes | Thereza |
 
@@ -508,7 +507,7 @@ Fluxo principal:
 |--------|-------------|
 | Testes de aceitação | Todos |
 | Revisão de segurança | Thereza |
-| Revisão de responsividade | Lucas |
+| Revisão de responsividade | Vinicius |
 | Deploy e apresentação | Todos |
 
 ### 6.3 Riscos
