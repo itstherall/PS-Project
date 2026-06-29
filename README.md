@@ -498,7 +498,7 @@ Fluxo principal:
 |--------|-------------|
 | Finalizar compra e gerar pedido | Vinicius |
 | Liberar download após compra | Vinicius |
-| Gestão de eventos/fotos no admin | Vinicius |
+| Gestão de eventos/fotos no admin | F |
 | Envio de avisos para clientes | Thereza |
 
 **Sprint 5 — Testes e Entrega** (1–2 semanas)
