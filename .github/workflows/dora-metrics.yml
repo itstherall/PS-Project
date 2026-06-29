@@ -1,126 +1,136 @@
 name: Métricas DORA
 
-on: 
+on:
   workflow_dispatch:
-  push: 
-    branches: 
-      - 'main'
+  push:
+    branches:
+      - main
 
 jobs:
-    dora:
-      runs-on: windows-latest
-      steps:
-        - name: Test frenquecy deploy
-          uses: DeveloperMetrics/deployment-frequency@main
-          with:
-            workflows: 'CI/CD Pipeline'
-            actions-token: "${{ secrets.GITHUB_TOKEN }}"
-        - name: Test lead time
-          uses: DeveloperMetrics/lead-time-for-changes@main
-          with:
-            workflows: 'CI/CD Pipeline'
-            actions-token: "${{ secrets.GITHUB_TOKEN }}"
-          
-        # Change Failure Rate
-        - name: Calculate CFR
-          shell: pwsh
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          run: |
+  dora:
+    runs-on: windows-latest
 
-            $headers = @{
-              Authorization = "token $env:GITHUB_TOKEN"
-            }
+    steps:
+      - name: Test Deployment Frequency
+        uses: DeveloperMetrics/deployment-frequency@main
+        with:
+          workflows: 'Métricas DORA'
+          actions-token: ${{ secrets.GITHUB_TOKEN }}
 
-            $url = "https://api.github.com/repos/itstherall/PS-Project/actions/runs"
+      - name: Test Lead Time
+        uses: DeveloperMetrics/lead-time-for-changes@main
+        with:
+          workflows: 'Métricas DORA'
+          actions-token: ${{ secrets.GITHUB_TOKEN }}
 
-            $response = Invoke-RestMethod -Uri $url -Headers $headers
+      # -----------------------------
+      # CHANGE FAILURE RATE (CFR)
+      # -----------------------------
+      - name: Calculate CFR
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $headers = @{
+            Authorization = "Bearer $env:GITHUB_TOKEN"
+          }
 
-            $runs = $response.workflow_runs
+          $url = "https://api.github.com/repos/itstherall/PS-Project/actions/runs?per_page=100"
 
-            $total = $runs.Count
+          $response = Invoke-RestMethod -Uri $url -Headers $headers
+          $runs = $response.workflow_runs
 
-            $failed = ($runs | Where-Object {
-              $_.conclusion -eq "failure"
-            }).Count
+          if (-not $runs) {
+            Write-Host "No workflow runs found"
+            exit 0
+          }
 
-            if ($total -gt 0) {
+          # Filtra apenas main + push
+          $filtered = $runs | Where-Object {
+            $_.head_branch -eq "main" -and $_.event -eq "push"
+          }
 
-              $cfr = ($failed / $total) * 100
+          $total = $filtered.Count
 
-              Add-Content $env:GITHUB_STEP_SUMMARY "## Change Failure Rate"
-              Add-Content $env:GITHUB_STEP_SUMMARY ""
-              Add-Content $env:GITHUB_STEP_SUMMARY "- Total Deploys: $total"
-              Add-Content $env:GITHUB_STEP_SUMMARY "- Failed Deploys: $failed"
-              Add-Content $env:GITHUB_STEP_SUMMARY ("- CFR: {0:N2}%" -f $cfr)
-            }
-              
+          $failed = ($filtered | Where-Object {
+            $_.conclusion -eq "failure"
+          }).Count
 
-        # MTTR
+          if ($total -gt 0) {
+            $cfr = ($failed / $total) * 100
 
-        # MTTR
+            Add-Content $env:GITHUB_STEP_SUMMARY "## Change Failure Rate"
+            Add-Content $env:GITHUB_STEP_SUMMARY ""
+            Add-Content $env:GITHUB_STEP_SUMMARY "- Total Deploys: $total"
+            Add-Content $env:GITHUB_STEP_SUMMARY "- Failed Deploys: $failed"
+            Add-Content $env:GITHUB_STEP_SUMMARY ("- CFR: {0:N2}%" -f $cfr)
+          } else {
+            Add-Content $env:GITHUB_STEP_SUMMARY "## Change Failure Rate"
+            Add-Content $env:GITHUB_STEP_SUMMARY "- No deploys found"
+          }
 
-        - name: Calculate MTTR
-          shell: pwsh
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          run: |
+      # -----------------------------
+      # MTTR
+      # -----------------------------
+      - name: Calculate MTTR
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $headers = @{
+            Authorization = "Bearer $env:GITHUB_TOKEN"
+          }
 
-            $headers = @{
-              Authorization = "token $env:GITHUB_TOKEN"
-            }
+          $url = "https://api.github.com/repos/itstherall/PS-Project/actions/runs?per_page=100"
 
-            $url = "https://api.github.com/repos/itstherall/PS-Project/actions/runs?per_page=100"
+          $response = Invoke-RestMethod -Uri $url -Headers $headers
+          $runs = $response.workflow_runs
 
-            $response = Invoke-RestMethod -Uri $url -Headers $headers
+          if (-not $runs) {
+            Write-Host "No workflow runs found"
+            exit 0
+          }
 
-            # Filtra apenas o workflow de deploy
-            $runs = $response.workflow_runs |
-              Where-Object {
-                $_.name -eq "CI/CD Pipeline"
-              } |
-              Sort-Object run_number
+          # Filtra workflow correto + main
+          $runs = $runs |
+            Where-Object {
+              $_.name -eq "Métricas DORA" -and $_.head_branch -eq "main"
+            } |
+            Sort-Object run_number
 
-            $recoveryTimes = @()
+          $recoveryTimes = @()
 
-            for ($i = 0; $i -lt $runs.Count; $i++) {
+          for ($i = 0; $i -lt $runs.Count; $i++) {
 
-              if ($runs[$i].conclusion -eq "failure") {
+            if ($runs[$i].conclusion -eq "failure") {
 
-                # Procura o primeiro sucesso após a falha
-                for ($j = $i + 1; $j -lt $runs.Count; $j++) {
+              for ($j = $i + 1; $j -lt $runs.Count; $j++) {
 
-                  if ($runs[$j].conclusion -eq "success") {
+                if ($runs[$j].conclusion -eq "success") {
 
-                    $failureTime = Get-Date $runs[$i].updated_at
-                    $successTime = Get-Date $runs[$j].updated_at
+                  $failureTime = Get-Date $runs[$i].updated_at
+                  $successTime = Get-Date $runs[$j].updated_at
 
-                    $recoveryHours =
-                      ($successTime - $failureTime).TotalHours
+                  $recoveryHours = ($successTime - $failureTime).TotalHours
+                  $recoveryTimes += $recoveryHours
 
-                    $recoveryTimes += $recoveryHours
-
-                    break
-                  }
+                  break
                 }
               }
             }
+          }
 
-            Add-Content $env:GITHUB_STEP_SUMMARY ""
-            Add-Content $env:GITHUB_STEP_SUMMARY "## Mean Time To Recovery"
-            Add-Content $env:GITHUB_STEP_SUMMARY ""
+          Add-Content $env:GITHUB_STEP_SUMMARY ""
+          Add-Content $env:GITHUB_STEP_SUMMARY "## Mean Time To Recovery"
 
-            if ($recoveryTimes.Count -gt 0) {
+          if ($recoveryTimes.Count -gt 0) {
 
-              $mttr =
-                ($recoveryTimes | Measure-Object -Average).Average
+            $mttr = ($recoveryTimes | Measure-Object -Average).Average
 
-              Add-Content $env:GITHUB_STEP_SUMMARY "- Incidents: $($recoveryTimes.Count)"
-              Add-Content $env:GITHUB_STEP_SUMMARY ("- MTTR: {0:N2} hours" -f $mttr)
+            Add-Content $env:GITHUB_STEP_SUMMARY "- Incidents: $($recoveryTimes.Count)"
+            Add-Content $env:GITHUB_STEP_SUMMARY ("- MTTR: {0:N2} hours" -f $mttr)
 
-            } else {
+          } else {
 
-              Add-Content $env:GITHUB_STEP_SUMMARY "- No recoverable incidents found"
-
-            }
+            Add-Content $env:GITHUB_STEP_SUMMARY "- No recoverable incidents found"
           }
