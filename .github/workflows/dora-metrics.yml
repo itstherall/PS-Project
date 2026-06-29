@@ -58,6 +58,8 @@ jobs:
 
         # MTTR
 
+        # MTTR
+
         - name: Calculate MTTR
           shell: pwsh
           env:
@@ -68,33 +70,57 @@ jobs:
               Authorization = "token $env:GITHUB_TOKEN"
             }
 
-            $url = "https://api.github.com/repos/itstherall/PS-Project/actions/runs"
+            $url = "https://api.github.com/repos/itstherall/PS-Project/actions/runs?per_page=100"
 
             $response = Invoke-RestMethod -Uri $url -Headers $headers
 
-            $runs = $response.workflow_runs
+            # Filtra apenas o workflow de deploy
+            $runs = $response.workflow_runs |
+              Where-Object {
+                $_.name -eq "CI/CD Pipeline"
+              } |
+              Sort-Object run_number
 
-            $failedRun = $runs | Where-Object {
-              $_.conclusion -eq "failure"
-            } | Select-Object -First 1
+            $recoveryTimes = @()
 
-            if ($failedRun) {
+            for ($i = 0; $i -lt $runs.Count; $i++) {
 
-              $successRun = $runs | Where-Object {
-                $_.conclusion -eq "success" -and
-                $_.run_number -gt $failedRun.run_number
-              } | Select-Object -First 1
+              if ($runs[$i].conclusion -eq "failure") {
 
-              if ($successRun) {
+                # Procura o primeiro sucesso após a falha
+                for ($j = $i + 1; $j -lt $runs.Count; $j++) {
 
-                $failedTime = Get-Date $failedRun.updated_at
-                $successTime = Get-Date $successRun.updated_at
+                  if ($runs[$j].conclusion -eq "success") {
 
-                $mttr = $successTime - $failedTime
+                    $failureTime = Get-Date $runs[$i].updated_at
+                    $successTime = Get-Date $runs[$j].updated_at
 
-                Add-Content $env:GITHUB_STEP_SUMMARY ""
-                Add-Content $env:GITHUB_STEP_SUMMARY "## Mean Time To Recovery"
-                Add-Content $env:GITHUB_STEP_SUMMARY ""
-                Add-Content $env:GITHUB_STEP_SUMMARY ("- MTTR: {0:N2} hours" -f $mttr.TotalHours)
+                    $recoveryHours =
+                      ($successTime - $failureTime).TotalHours
+
+                    $recoveryTimes += $recoveryHours
+
+                    break
+                  }
+                }
               }
             }
+
+            Add-Content $env:GITHUB_STEP_SUMMARY ""
+            Add-Content $env:GITHUB_STEP_SUMMARY "## Mean Time To Recovery"
+            Add-Content $env:GITHUB_STEP_SUMMARY ""
+
+            if ($recoveryTimes.Count -gt 0) {
+
+              $mttr =
+                ($recoveryTimes | Measure-Object -Average).Average
+
+              Add-Content $env:GITHUB_STEP_SUMMARY "- Incidents: $($recoveryTimes.Count)"
+              Add-Content $env:GITHUB_STEP_SUMMARY ("- MTTR: {0:N2} hours" -f $mttr)
+
+            } else {
+
+              Add-Content $env:GITHUB_STEP_SUMMARY "- No recoverable incidents found"
+
+            }
+          }
